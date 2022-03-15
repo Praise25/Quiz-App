@@ -2,8 +2,16 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
-const axios = require("axios").default;
-const processResults = require("./assets");
+const Quiz = require("./models/quiz");
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost:27017/game-trivia");
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+  console.log("Database connected");
+});
 
 const app = express();
 
@@ -15,25 +23,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 app.get("/quiz", async (req, res) => {
-  const results = await axios
-    .get(
-      "https://opentdb.com/api.php?amount=10&category=15&difficulty=easy&type=multiple"
-    )
-    .then((res) => {
-      return res.data.results;
-    })
-    .catch((e) => {
-      console.log("Error retrieving quiz questions...");
-    });
-  let quizzes = processResults(results);
-  res.render("trivia", { quizzes });
+  const quizzes = await Quiz.find({});
+  res.render("index", { quizzes });
 });
 
-app.get("/quiz/:id", (req, res) => {
-  
-})
+app.get("/quiz/:id", async (req, res) => {
+  const { id } = req.params;
+  const quiz = await Quiz.findById(id);
+  res.render("show", { quiz });
+});
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
 });
-
