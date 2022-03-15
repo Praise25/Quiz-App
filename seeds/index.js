@@ -1,4 +1,19 @@
-const results = await axios
+const mongoose = require("mongoose");
+const Quiz = require("../models/quiz");
+const axios = require("axios");
+const { processResults } = require("./assets");
+
+mongoose.connect("mongodb://localhost:27017/game-trivia");
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+  console.log("Database connected");
+});
+
+const seedDb = async function () {
+  await Quiz.deleteMany({});
+  let results = await axios
     .get(
       "https://opentdb.com/api.php?amount=10&category=15&difficulty=easy&type=multiple"
     )
@@ -8,3 +23,18 @@ const results = await axios
     .catch((e) => {
       console.log("Error retrieving quiz questions...");
     });
+
+  results = processResults(results);
+
+  for (let result of results) {
+    const quiz = new Quiz({
+      question: result.question,
+      answers: result.answers,
+    });
+    await quiz.save();
+  }
+};
+
+seedDb().then(() => {
+  mongoose.connection.close();
+})
