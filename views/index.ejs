@@ -9,15 +9,18 @@
 </head>
 
 <body>
-  <% for (quiz of quizzes) { %> 
-    <a href="/quiz/<%= quiz._id %> "><h1>Question</h1></a>
-    <p>Question: <%= quiz.question %></p>
-    <ul>
-      <% for (let ans of quiz.answers) { %> 
-        <li><%= ans %></li>
-      <% } %> 
-    </ul>
-  <% } %> 
+  <% for (quiz of quizzes) { %>
+  <a href="/quiz/<%= quiz._id %> ">
+    <h1>Question</h1>
+  </a>
+  <p id="question">Question: </p>
+  <ul>
+    <% for (let ans of quiz.answers) { %>
+    <li><%= ans %> </li>
+    <% } %>
+  </ul>
+  <% } %>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>
