@@ -21,6 +21,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname, "static")));
 
 app.get("/quiz", async (req, res) => {
   const quizzes = await Quiz.find({});
