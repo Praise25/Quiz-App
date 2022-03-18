@@ -4,6 +4,7 @@ const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
 const Quiz = require("./models/quiz");
 const mongoose = require("mongoose");
+const { getQuestions, seedDb } = require("./assets");
 
 mongoose.connect("mongodb://localhost:27017/game-trivia");
 
@@ -26,6 +27,23 @@ app.use(express.static(path.join(__dirname, "static")));
 app.get("/quiz", async (req, res) => {
   const quizzes = await Quiz.find({});
   res.render("index", { quizzes });
+});
+
+app.get("/quiz/new", (req, res) => {
+  res.render("new");
+});
+
+app.post("/quiz/new", async (req, res) => {
+  const { category, difficulty } = req.body;
+  const questions = await getQuestions(category, difficulty).then(
+    (data) => data
+  );
+  if (questions.responseCode === 0) {
+    await seedDb(questions.result);
+    res.redirect("/quiz");
+  } else {
+    res.send("No questions could be found. Please adjust your quiz category/type and try again.");
+  }
 });
 
 app.get("/quiz/:id", async (req, res) => {
