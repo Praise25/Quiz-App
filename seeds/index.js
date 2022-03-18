@@ -22,12 +22,14 @@ const seedDb = async function () {
     })
     .catch((e) => {
       console.log("Error retrieving quiz questions...");
+      console.log(e);
     });
 
   results = processResults(results);
 
   for (let result of results) {
     const quiz = new Quiz({
+      serialNum: result.serialNum,
       question: result.question,
       answers: result.answers,
     });
