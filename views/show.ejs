@@ -32,10 +32,16 @@
     </div>
     <div class="row py-3 d-flex">
       <div class="col">
-        <button class="btn btn-danger">Prev Question</button>
+        <% if (!(prev === "empty")) {%> 
+          <a href="/quiz/<%= prev._id %>"><button class="btn btn-danger">Prev Question</button></a>
+        <% } %> 
       </div>
       <div class="col d-flex justify-content-end">
-        <button class="btn btn-success">Next Question</button>
+        <% if (!(next === "empty")) {%> 
+          <a href="/quiz/<%= next._id %>"><button class="btn btn-success">Next Question</button></a>
+        <% } else {%> 
+          <button class="btn btn-success">Submit</button>
+        <% } %> 
       </div>
     </div>
   </div>

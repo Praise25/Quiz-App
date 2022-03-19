@@ -42,14 +42,24 @@ app.post("/quiz/new", async (req, res) => {
     await seedDb(questions.result);
     res.redirect("/quiz");
   } else {
-    res.send("No questions could be found. Please adjust your quiz category/type and try again.");
+    res.send(
+      "No questions could be found. Please adjust your quiz category/type and try again."
+    );
   }
 });
 
 app.get("/quiz/:id", async (req, res) => {
   const { id } = req.params;
   const quiz = await Quiz.findById(id);
-  res.render("show", { quiz });
+  const serialNum = quiz.serialNum;
+  let prev = await Quiz.findOne({ serialNum: serialNum - 1 });
+  let next = await Quiz.findOne({ serialNum: serialNum + 1 });
+  if (serialNum === 1) {
+    prev = "empty";
+  } else if (serialNum === 20) {
+    next = "empty";
+  }
+  res.render("show", { quiz, prev, next });
 });
 
 app.listen(3000, () => {
