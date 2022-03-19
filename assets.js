@@ -1,5 +1,8 @@
-const axios = require("axios");
+const axios = require("axios").default;
 const Quiz = require("./models/quiz");
+const Choice = require("./models/choice");
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 const shuffle = function (array) {
   let currentIndex = array.length,
@@ -55,13 +58,23 @@ const getQuestions = async function (category, difficulty) {
   };
 };
 
+const fixHtmlEntityDisplay = function(string) {
+  const dom = new JSDOM(
+    `<!DOCTYPE html><body><p id="main">${string}</p></body>`
+  );
+  return dom.window.document.getElementById("main").textContent;
+}
+
 const seedDb = async function (results) {
   await Quiz.deleteMany({});
   for (let result of results) {
+    for (let i = 0; i < result.answers.length; i++) {
+      result.answers[i] = fixHtmlEntityDisplay(result.answers[i]);
+    }
     const quiz = new Quiz({
       serialNum: result.serialNum,
       category: result.category,
-      question: result.question,
+      question: fixHtmlEntityDisplay(result.question),
       answers: result.answers,
       correctAnswer: result.correctAnswer,
     });
@@ -69,5 +82,31 @@ const seedDb = async function (results) {
   }
 };
 
+const getDate = function (date) {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  const yyyy = today.getFullYear();
+
+  const processedDate = `${dd}/${mm}/${yyyy}`;
+  return processedDate;
+};
+
+const createChoices = async function(quizzes) {
+  for (let quiz of quizzes) {
+    const choice = new Choice({
+      serialNum: quiz.serialNum,
+      answer: "",
+      status: ""
+    })
+    await choice.save();
+  }
+}
+
+
+
+
 module.exports.getQuestions = getQuestions;
 module.exports.seedDb = seedDb;
+module.exports.getDate = getDate;
+module.exports.createChoices = createChoices;
