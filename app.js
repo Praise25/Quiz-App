@@ -95,6 +95,8 @@ app.post("/quiz/save-answer", async (req, res) => {
 });
 
 app.get("/quiz/:id", async (req, res) => {
+  const quizzes = await Quiz.find({});
+  const numOfQuestions = quizzes.length;
   const { id } = req.params;
   const quiz = await Quiz.findById(id);
   const serialNum = quiz.serialNum;
@@ -106,7 +108,7 @@ app.get("/quiz/:id", async (req, res) => {
   } else if (serialNum === 20) {
     next = "empty";
   }
-  res.render("show", { quiz, prev, next, choice });
+  res.render("show", { quiz, prev, next, choice, numOfQuestions, quizzes });
 });
 
 app.listen(3000, () => {
