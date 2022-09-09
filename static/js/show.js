@@ -20,6 +20,14 @@ const recordAnswer = async function () {
   const num = serialNum.innerText;
   const ans = this.innerText;
   choice[num] = ans;
+  answers.forEach((el) => {
+    if (el.classList.contains("btn-dark")) {
+      el.classList.remove("btn-dark");
+      el.classList.add("btn-primary");
+    }
+  })
+  this.classList.add("btn-dark");
+  
   // eslint-disable-next-line no-undef
   axios.post(
     "/quiz/save-answer",

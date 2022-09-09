@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout("layouts/boilerplate") %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Trivia</title>
-</head>
-
-<body>
-  <h1>Score: <%= result.score %> </h1>
-  <h3>Date Taken: <%= result.date %> </h3>
-</body>
-
-</html>
+<h1>Score: <%= result.score %> </h1>
+<h3>Date Taken: <%= result.date %> </h3>
+<a href="/quiz">
+  <button class="btn btn-primary">Home</button>
+</a>
+<button class="btn btn-success">Retake Test</button>

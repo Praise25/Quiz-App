@@ -103,9 +103,6 @@ const createChoices = async function(quizzes) {
   }
 }
 
-
-
-
 module.exports.getQuestions = getQuestions;
 module.exports.seedDb = seedDb;
 module.exports.getDate = getDate;
