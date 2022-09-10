@@ -97,6 +97,13 @@ app.post("/quiz/save-answer", async (req, res) => {
   }
 });
 
+app.post("/quiz/reset-test", async (req, res) => {
+  await Choice.deleteMany({});
+  const quiz = await Quiz.findOne({ serialNum: 1 });
+  res.redirect(`/quiz/${quiz._id}`);
+})
+
+
 app.get("/quiz/:id", async (req, res) => {
   const quizzes = await Quiz.find({});
   const numOfQuestions = quizzes.length;
@@ -113,6 +120,7 @@ app.get("/quiz/:id", async (req, res) => {
   }
   res.render("show", { quiz, prev, next, choice, numOfQuestions, quizzes });
 });
+
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
