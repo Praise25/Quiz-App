@@ -73,7 +73,9 @@ module.exports.saveAnswer = async (req, res) => {
 
 module.exports.resetTest = async (req, res) => {
   await Choice.deleteMany({});
-  const quiz = await Quiz.findOne({ serialNum: 1 });
+  const quizzes = await Quiz.find({});
+  await createChoices(quizzes);
+  const quiz = quizzes[0];
   res.redirect(`/quiz/${quiz._id}`);
 };
 

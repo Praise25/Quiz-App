@@ -1,9 +1,14 @@
+if (process.env.NODE_ENV !==  "production") {
+  require("dotenv").config();
+}
+
 const mongoose = require("mongoose");
 const Quiz = require("../models/quiz");
 const axios = require("axios");
 const { processResults } = require("./assets");
+const dbUrl = process.env.DB_URL;
 
-mongoose.connect("mongodb://localhost:27017/game-trivia");
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
