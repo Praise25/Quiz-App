@@ -8,7 +8,7 @@ const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const quizRoutes = require("./routes/quiz");
-const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/game-trivia;"
 
 const app = express();
 // "mongodb://localhost:27017/game-trivia"
