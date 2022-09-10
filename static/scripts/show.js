@@ -20,6 +20,7 @@ const recordAnswer = async function () {
   const num = serialNum.innerText;
   const ans = this.innerText;
   choice[num] = ans;
+  // Change the color of the selected answer when the button is clicked
   answers.forEach((el) => {
     if (el.classList.contains("btn-dark")) {
       el.classList.remove("btn-dark");
