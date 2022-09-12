@@ -30,6 +30,23 @@ module.exports.createNewQuiz = async (req, res) => {
   }
 };
 
+module.exports.renderQuiz = async (req, res) => {
+  const quizzes = await Quiz.find({});
+  const numOfQuestions = quizzes.length;
+  const { id } = req.params;
+  const quiz = await Quiz.findById(id);
+  const serialNum = quiz.serialNum;
+  const choice = await Choice.findOne({ serialNum: serialNum });
+  let prev = await Quiz.findOne({ serialNum: serialNum - 1 });
+  let next = await Quiz.findOne({ serialNum: serialNum + 1 });
+  if (serialNum === 1) {
+    prev = "empty";
+  } else if (serialNum === 20) {
+    next = "empty";
+  }
+  res.render("show", { quiz, prev, next, choice, numOfQuestions, quizzes });
+};
+
 module.exports.generateResult = async (req, res) => {
   const usrChoices = await Choice.find({});
   let score = 0;
@@ -77,21 +94,4 @@ module.exports.resetTest = async (req, res) => {
   await resetChoices();
   const quiz = await Quiz.findOne({"serialNum": "1"});
   res.redirect(`/quiz/${quiz._id}`);
-};
-
-module.exports.renderQuiz = async (req, res) => {
-  const quizzes = await Quiz.find({});
-  const numOfQuestions = quizzes.length;
-  const { id } = req.params;
-  const quiz = await Quiz.findById(id);
-  const serialNum = quiz.serialNum;
-  const choice = await Choice.findOne({ serialNum: serialNum });
-  let prev = await Quiz.findOne({ serialNum: serialNum - 1 });
-  let next = await Quiz.findOne({ serialNum: serialNum + 1 });
-  if (serialNum === 1) {
-    prev = "empty";
-  } else if (serialNum === 20) {
-    next = "empty";
-  }
-  res.render("show", { quiz, prev, next, choice, numOfQuestions, quizzes });
 };

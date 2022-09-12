@@ -2,15 +2,15 @@
 
 <div class="container my-auto">
   <div class="row">
-    <div class="col border border-primary border-5">
+    <div class="col border border-primary border-5 rounded-3">
       <div class="row">
         <div class="col text-center">
-          <h2>Computer Quiz</h2>
+          <h2><%= quiz.category %> - <%= quiz.difficulty %></h2>
         </div>
       </div>
       <div class="row">
         <div class="col text-center">
-          <p id="question"><span id="serial-num"><%= quiz.serialNum %></span>. <%= quiz.question %></p>
+          <p id="question"><span id="serial-num" hidden><%= quiz.serialNum %></span><%= quiz.question %></p>
         </div>
       </div>
       <div class="row">
@@ -27,7 +27,7 @@
         <% } %>
       </div>
       <div class="row py-3 d-flex">
-        <div class="col">
+        <div class="col d-flex justify-content-center">
           <% if (!(prev === "empty")) {%>
           <a href="/quiz/<%= prev._id %>"><button class="btn btn-danger" id="prev-btn">Prev</button></a>
           <% } %>
@@ -37,7 +37,7 @@
             <button class="btn btn-info">Submit</button>
           </form>
         </div>
-        <div class="col d-flex justify-content-end">
+        <div class="col d-flex justify-content-center">
           <% if (!(next === "empty")) {%>
           <a href="/quiz/<%= next._id %>"><button class="btn btn-success" id="next-btn">Next</button></a>
           <% } %>

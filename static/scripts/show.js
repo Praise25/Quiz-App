@@ -1,6 +1,7 @@
 const question = document.querySelector("#question");
 const answers = document.querySelectorAll("button.answer");
 const serialNum = document.querySelector("#serial-num");
+const numBtns = document.querySelectorAll("button.q-btn");
 
 const choice = new Object();
 
@@ -16,7 +17,7 @@ const fixHtmlEntityDisplay = function () {
   }
 };
 
-const recordAnswer = async function () {
+const recordAnswer = function () {
   const num = serialNum.innerText;
   const ans = this.innerText;
   choice[num] = ans;
@@ -37,7 +38,17 @@ const recordAnswer = async function () {
   );
 };
 
+const showActiveQuestion = function () {
+  numBtns.forEach((el) => {
+    if (el.innerText === serialNum.innerText) {
+      el.classList.remove("btn-outline-secondary")
+      el.classList.add("btn-secondary")
+    }
+  })
+}
+
 fixHtmlEntityDisplay();
+showActiveQuestion();
 
 for (let answer of answers) {
   answer.addEventListener("click", recordAnswer);

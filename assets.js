@@ -21,6 +21,10 @@ const shuffle = function (array) {
   return array;
 };
 
+const capitalize = function(word) {
+  return word[0].toUpperCase() + word.slice(1);
+}
+
 const processResults = function (results) {
   const newResults = [];
   let serialNum = 1;
@@ -30,13 +34,13 @@ const processResults = function (results) {
     answers = answers.concat(result.incorrect_answers);
     processed["serialNum"] = serialNum;
     processed["category"] = result.category;
+    processed["difficulty"] = capitalize(result.difficulty);
     processed["question"] = result.question;
     processed["answers"] = shuffle(answers);
     processed["correctAnswer"] = result.correct_answer;
     newResults.push(processed);
     serialNum += 1;
   }
-  // returns an array of objects with only the serial number, questions and answers
   return newResults;
 };
 
@@ -74,6 +78,7 @@ const saveQuestions = async function (results) {
     const quiz = new Quiz({
       serialNum: result.serialNum,
       category: result.category,
+      difficulty: result.difficulty,
       question: fixHtmlEntityDisplay(result.question),
       answers: result.answers,
       correctAnswer: result.correctAnswer,
