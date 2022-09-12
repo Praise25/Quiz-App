@@ -21,7 +21,8 @@ module.exports.createNewQuiz = async (req, res) => {
   if (questions.responseCode === 0) {
     await saveQuestions(questions.result);
     await createChoices(questions.result);
-    res.redirect("/quiz");
+    const quiz = await Quiz.findOne({"serialNum": "1"});
+    res.redirect(`/quiz/${quiz._id}`);
   } else {
     res.send(
       "No questions could be found. Please adjust your quiz category/type and try again."
