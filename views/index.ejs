@@ -1,13 +1,15 @@
 <% layout("layouts/boilerplate") %>
 
-<% for (quiz of quizzes) { %>
-<a href="/quiz/<%= quiz._id %> ">
-  <h1>Question <%= quiz.serialNum %> </h1>
-</a>
-<p class="question"><%= quiz.question %></p>
-<ul>
-  <% for (let ans of quiz.answers) { %>
-  <li class="answer"><%= ans %></li>
+<div class="container">
+  <% for (quiz of quizzes) { %>
+  <a href="/quiz/<%= quiz._id %> ">
+    <h1>Question <%= quiz.serialNum %> </h1>
+  </a>
+  <p class="question"><%= quiz.question %></p>
+  <ul>
+    <% for (let ans of quiz.answers) { %>
+    <li class="answer"><%= ans %></li>
+    <% } %>
+  </ul>
   <% } %>
-</ul>
-<% } %>
+</div>

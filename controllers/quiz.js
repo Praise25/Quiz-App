@@ -74,7 +74,7 @@ module.exports.saveAnswer = async (req, res) => {
 
 module.exports.resetTest = async (req, res) => {
   await resetChoices();
-  const quiz = Quiz.find({})[0];
+  const quiz = await Quiz.findOne({"serialNum": "1"});
   res.redirect(`/quiz/${quiz._id}`);
 };
 

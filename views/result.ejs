@@ -1,10 +1,12 @@
 <% layout("layouts/boilerplate") %>
 
-<h1>Score: <%= result.score %> </h1>
-<h3>Date Taken: <%= result.date %> </h3>
-<a href="/quiz">
-  <button class="btn btn-primary">Home</button>
-</a>
-<form action="/quiz/reset-test" method="POST">
-  <button class="btn btn-success" id="retake-test">Retake Test</button>
-</form>
+<div class="container">
+  <h1>Score: <%= result.score %> </h1>
+  <h3>Date Taken: <%= result.date %> </h3>
+  <a href="/quiz">
+    <button class="btn btn-primary">Home</button>
+  </a>
+  <form action="/quiz/reset-test" method="POST">
+    <button class="btn btn-success" id="retake-test">Retake Test</button>
+  </form>
+</div>
