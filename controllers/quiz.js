@@ -1,7 +1,7 @@
 const Quiz = require("../models/quiz");
 const Choice = require("../models/choice");
 const Result = require("../models/result");
-const { getQuestions, seedDb, getDate, createChoices } = require("../assets");
+const { getQuestions, saveQuestions, getDate, createChoices, resetChoices } = require("../assets");
 
 module.exports.index = async (req, res) => {
   const quizzes = await Quiz.find({});
@@ -19,7 +19,7 @@ module.exports.createNewQuiz = async (req, res) => {
     (data) => data
   );
   if (questions.responseCode === 0) {
-    await seedDb(questions.result);
+    await saveQuestions(questions.result);
     await createChoices(questions.result);
     res.redirect("/quiz");
   } else {
@@ -30,9 +30,9 @@ module.exports.createNewQuiz = async (req, res) => {
 };
 
 module.exports.generateResult = async (req, res) => {
-  const choices = await Choice.find({});
+  const usrChoices = await Choice.find({});
   let score = 0;
-  for (let choice of choices) {
+  for (let choice of usrChoices) {
     const serialNumber = choice.serialNum;
     const quiz = await Quiz.findOne({ serialNum: serialNumber });
     if (choice.answer === quiz.correctAnswer) {
@@ -42,12 +42,13 @@ module.exports.generateResult = async (req, res) => {
       await Choice.findByIdAndUpdate(choice._id, { status: "incorrect" });
     }
   }
-
   const result = new Result({
     score: score,
     date: getDate(),
+    choices: usrChoices
   });
   await result.save();
+  await resetChoices();
   res.redirect("/quiz/result");
 };
 
@@ -72,10 +73,8 @@ module.exports.saveAnswer = async (req, res) => {
 };
 
 module.exports.resetTest = async (req, res) => {
-  await Choice.deleteMany({});
-  const quizzes = await Quiz.find({});
-  await createChoices(quizzes);
-  const quiz = quizzes[0];
+  await resetChoices();
+  const quiz = Quiz.find({})[0];
   res.redirect(`/quiz/${quiz._id}`);
 };
 

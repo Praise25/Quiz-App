@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const ResultSchema = new mongoose.Schema({
+const ResultSchema = new Schema({
   score: Number,
   date: String,
+  choices: [{
+    type: Schema.Types.ObjectId,
+    ref: "Choice"
+  }]
 })
 
 module.exports = mongoose.model("Result", ResultSchema);

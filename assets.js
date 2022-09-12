@@ -40,6 +40,13 @@ const processResults = function (results) {
   return newResults;
 };
 
+const fixHtmlEntityDisplay = function(string) {
+  const dom = new JSDOM(
+    `<!DOCTYPE html><body><p id="main">${string}</p></body>`
+  );
+  return dom.window.document.getElementById("main").textContent;
+}
+
 const getQuestions = async function (category, difficulty) {
   let response = await axios
     .get(
@@ -58,14 +65,7 @@ const getQuestions = async function (category, difficulty) {
   };
 };
 
-const fixHtmlEntityDisplay = function(string) {
-  const dom = new JSDOM(
-    `<!DOCTYPE html><body><p id="main">${string}</p></body>`
-  );
-  return dom.window.document.getElementById("main").textContent;
-}
-
-const seedDb = async function (results) {
+const saveQuestions = async function (results) {
   await Quiz.deleteMany({});
   for (let result of results) {
     for (let i = 0; i < result.answers.length; i++) {
@@ -92,6 +92,12 @@ const getDate = function (date) {
   return processedDate;
 };
 
+const resetChoices = async function() {
+  await Choice.deleteMany({});
+  const quizzes = await Quiz.find({});
+  await createChoices(quizzes);
+}
+
 const createChoices = async function(quizzes) {
   for (let quiz of quizzes) {
     const choice = new Choice({
@@ -103,7 +109,10 @@ const createChoices = async function(quizzes) {
   }
 }
 
-module.exports.getQuestions = getQuestions;
-module.exports.seedDb = seedDb;
-module.exports.getDate = getDate;
-module.exports.createChoices = createChoices;
+module.exports = {
+  getQuestions,
+  saveQuestions,
+  getDate,
+  resetChoices,
+  createChoices
+}
