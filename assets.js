@@ -4,6 +4,21 @@ const Choice = require("./models/choice");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const shuffle = function (array) {
   let currentIndex = array.length,
     randomIndex;
@@ -21,9 +36,9 @@ const shuffle = function (array) {
   return array;
 };
 
-const capitalize = function(word) {
+const capitalize = function (word) {
   return word[0].toUpperCase() + word.slice(1);
-}
+};
 
 const processResults = function (results) {
   const newResults = [];
@@ -44,12 +59,12 @@ const processResults = function (results) {
   return newResults;
 };
 
-const fixHtmlEntityDisplay = function(string) {
+const fixHtmlEntityDisplay = function (string) {
   const dom = new JSDOM(
     `<!DOCTYPE html><body><p id="main">${string}</p></body>`
   );
   return dom.window.document.getElementById("main").textContent;
-}
+};
 
 const getQuestions = async function (category, difficulty) {
   let response = await axios
@@ -87,37 +102,44 @@ const saveQuestions = async function (results) {
   }
 };
 
-const getDate = function (date) {
-  const today = new Date();
-  const dd = String(today.getDate()).padStart(2, "0");
-  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  const yyyy = today.getFullYear();
+const formatDate = (date) => {
+  date = String(date);
+  if (date.endsWith("1")) {return `${date}st`};
+  if (date.endsWith("2")) {return `${date}nd`};
+  if (date.endsWith("3")) {return `${date}rd`};
+}
 
-  const processedDate = `${dd}/${mm}/${yyyy}`;
+const generateDate = function (date) {
+  const today = new Date();
+  const day = formatDate(today.getDate());
+  const month = months[today.getMonth()]
+  const year = today.getFullYear();
+
+  const processedDate = [day, month, year];
   return processedDate;
 };
 
-const resetChoices = async function() {
+const resetChoices = async function () {
   await Choice.deleteMany({});
   const quizzes = await Quiz.find({});
   await createChoices(quizzes);
-}
+};
 
-const createChoices = async function(quizzes) {
+const createChoices = async function (quizzes) {
   for (let quiz of quizzes) {
     const choice = new Choice({
       serialNum: quiz.serialNum,
       answer: "",
-      status: ""
-    })
+      status: "",
+    });
     await choice.save();
   }
-}
+};
 
 module.exports = {
   getQuestions,
   saveQuestions,
-  getDate,
+  generateDate,
   resetChoices,
-  createChoices
-}
+  createChoices,
+};

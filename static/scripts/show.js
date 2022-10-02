@@ -42,7 +42,7 @@ const showActiveQuestion = function () {
   numBtns.forEach((el) => {
     if (el.innerText === serialNum.innerText) {
       el.classList.remove("btn-outline-secondary")
-      el.classList.add("btn-secondary")
+      el.classList.add("active-question")
     }
   })
 }

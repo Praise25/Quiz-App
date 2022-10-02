@@ -1,12 +1,18 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="container">
+<div class="container my-auto text-center">
   <h1>Score: <%= result.score %> </h1>
-  <h3>Date Taken: <%= result.date %> </h3>
-  <a href="/">
-    <button class="btn btn-primary">Home</button>
-  </a>
-  <form action="/quiz/reset-test" method="POST">
-    <button class="btn btn-success" id="retake-test">Retake Test</button>
-  </form>
+  <h3>Date Taken: <%= result.day %> <%= result.month %>, <%= result.year %> </h3>
+  <div class="row ">
+    <div class="col d-flex justify-content-end p-0">
+      <a href="/">
+        <button class="btn btn-primary result-btn">Home</button>
+      </a>
+    </div>
+    <div class="col d-flex justify-content-start">
+      <form action="/quiz/reset-test" method="POST">
+        <button class="btn btn-success result-btn" id="retake-test">Retake Test</button>
+      </form>
+    </div>
+  </div>
 </div>

@@ -1,7 +1,7 @@
 const Quiz = require("../models/quiz");
 const Choice = require("../models/choice");
 const Result = require("../models/result");
-const { getQuestions, saveQuestions, getDate, createChoices, resetChoices } = require("../assets");
+const { getQuestions, saveQuestions, generateDate, createChoices, resetChoices } = require("../assets");
 
 module.exports.index = async (req, res) => {
   const quizzes = await Quiz.find({});
@@ -60,9 +60,13 @@ module.exports.generateResult = async (req, res) => {
       await Choice.findByIdAndUpdate(choice._id, { status: "incorrect" });
     }
   }
+
+  const date = generateDate();
   const result = new Result({
     score: score,
-    date: getDate(),
+    day: date[0],
+    month: date[1],
+    year: date[2],
     choices: usrChoices
   });
   await result.save();
