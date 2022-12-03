@@ -80,13 +80,13 @@ module.exports.displayResult = async (req, res) => {
 };
 
 module.exports.saveAnswer = async (req, res) => {
-  const selection = JSON.parse(Object.keys(req.body)[0]);
-  const choice = await Choice.findOne({ serialNum: selection.serialNum });
+  const selection = req.body;
+  const choice = await Choice.findOne({ "serialNum": selection.serialNum });
   if (!choice) {
     const newChoice = new Choice({
-      serialNum: selection.serialNum,
-      answer: selection.answer,
-      status: "",
+      "serialNum": selection.serialNum,
+      "answer": selection.answer,
+      "status": "",
     });
     await newChoice.save();
   } else {
